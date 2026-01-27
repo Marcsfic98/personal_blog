@@ -1,98 +1,117 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# 📝 Personal Blog API - NestJS
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+Este é o projeto de uma API robusta para um Blog Pessoal, desenvolvida com o framework **NestJS**. A aplicação conta com um sistema completo de CRUD (Create, Read, Update, Delete) para postagens e temas, além de um sistema de autenticação de usuários via JWT.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## 🚀 Tecnologias Utilizadas
 
-## Description
+* **Linguagem:** [TypeScript](https://www.typescriptlang.org/)
+* **Framework:** [NestJS](https://nestjs.com/)
+* **ORM:** [TypeORM](https://typeorm.io/)
+* **Banco de Dados:** MySQL (Produção/Dev) / SQLite (Testes)
+* **Segurança:** Passport.js, JWT (JSON Web Token) e Bcrypt
+* **Documentação:** Swagger UI
+* **Validação:** Class-validator & Class-transformer
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## 📋 Funcionalidades e Endpoints
 
-## Project setup
+### Postagens (`/postagens`)
+* `GET /postagens` - Lista todas as postagens.
+* `GET /postagens/{id}` - Busca postagem por ID.
+* `GET /postagens/titulo/{titulo}` - Busca postagens por termo no título.
+* `POST /postagens` - Cria uma nova postagem (Protegido).
+* `PUT /postagens` - Atualiza uma postagem existente (Protegido).
+* `DELETE /postagens/{id}` - Remove uma postagem (Protegido).
 
+### Temas (`/temas`)
+* `GET /temas` - Lista todos os temas.
+* `GET /temas/{id}` - Busca tema por ID.
+* `GET /temas/descricao/{descricao}` - Busca temas por descrição.
+* `POST /temas` - Cria um novo tema (Protegido).
+* `PUT /temas` - Atualiza um tema (Protegido).
+* `DELETE /temas/{id}` - Remove um tema (Protegido).
+
+### Usuário (`/usuarios`)
+* `POST /usuarios/cadastrar` - Cadastro de novo usuário.
+* `POST /usuarios/logar` - Autenticação e retorno do Token JWT.
+* `GET /usuarios/all` - Lista todos os usuários (Admin).
+* `PUT /usuarios/atualizar` - Atualiza dados do usuário.
+
+## 🛡️ Segurança
+A API utiliza **Guardas de Rota (AuthGuard)**. Para acessar os métodos de escrita (POST, PUT, DELETE), é necessário enviar o Token JWT no Header da requisição:
+`Authorization: Bearer <seu_token>`
+
+## 📖 Como Executar o Projeto
+
+1.  **Clone o repositório:**
+    ```bash
+    git clone [https://github.com/seu-usuario/personal_blog.git](https://github.com/seu-usuario/personal_blog.git)
+    ```
+
+2.  **Instale as dependências:**
+    ```bash
+    npm install
+    ```
+
+3.  **Configure as variáveis de ambiente:**
+    Crie um arquivo `.env` na raiz do projeto (se necessário) ou configure o `app.module.ts` com suas credenciais do MySQL.
+
+4.  **Execute a aplicação:**
+    ```bash
+    # Modo de desenvolvimento
+    npm run start:dev
+    ```
+
+5.  **Acesse a documentação:**
+    Acesse: `http://localhost:4000/swagger` (ou a porta configurada no seu `main.ts`) para visualizar o Swagger.
+
+### 🧪 Testes de Ponta a Ponta (E2E)
+
+Os testes E2E foram implementados utilizando **Jest** e **Supertest**, simulando cenários reais de uso da API.
+
+**Cenários testados:**
+* **Fluxo de Usuário:** Cadastro, login com validação de hash Bcrypt e falha com credenciais inválidas.
+* **Integridade de Dados:** Garantia de que não é possível criar postagens vinculadas a temas inexistentes.
+* **Proteção de Rotas:** Verificação de que rotas sensíveis retornam `401 Unauthorized` quando o Token JWT está ausente ou expirado.
+* **Persistência:** Validação de que os dados são corretamente salvos e recuperados do banco de dados (SQLite/MySQL).
+
+Para rodar os testes E2E:
 ```bash
-$ npm install
-```
+npm run test:e2e
 
-## Compile and run the project
-
-```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
-```
-
-## Run tests
-
-```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
-```
-
-## Deployment
-
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
-
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
-
-```bash
-$ npm install -g @nestjs/mau
-$ mau deploy
-```
-
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
-
-## Resources
-
-Check out a few resources that may come in handy when working with NestJS:
-
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+PERSONAL_BLOG/
+├── src/
+│   ├── auth/                      # Módulo de Autenticação e Segurança
+│   │   ├── bcrypt/                # Utilitários de criptografia
+│   │   ├── constants/             # Chaves e constantes JWT
+│   │   ├── controller/            # Endpoints de login
+│   │   ├── entities/              # Modelo de Login do Usuário
+│   │   ├── guard/                 # Guardas de rota (JWT/Local)
+│   │   ├── services/              # Lógica de negócio de autenticação
+│   │   ├── strategy/              # Estratégias de validação Passport
+│   │   └── auth.module.ts
+│   ├── postagem/                  # Módulo de Postagens
+│   │   ├── controllers/
+│   │   ├── entities/
+│   │   ├── services/
+│   │   └── postagem.module.ts
+│   ├── temas/                     # Módulo de Temas (Categorias)
+│   │   ├── controller/
+│   │   ├── entities/
+│   │   ├── services/
+│   │   └── temas.module.ts
+│   ├── usuario/                   # Módulo de Usuários
+│   │   ├── controllers/
+│   │   ├── entities/
+│   │   ├── services/
+│   │   └── usuario.module.ts
+│   ├── app.controller.ts
+│   ├── app.module.ts
+│   ├── app.service.ts
+│   └── main.ts
+├── test/                          # Testes de Ponta a Ponta (E2E)
+│   ├── jest-e2e.json              # Configuração do Jest para E2E
+│   └── usuario.e2e-spec.ts        # Testes de integração do módulo Usuário
+├── .gitignore
+├── nest-cli.json
+├── package.json                   # Dependências e scripts do projeto
+└── tsconfig.json
